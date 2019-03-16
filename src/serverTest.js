@@ -3,6 +3,8 @@ var express = require('express');
 var app = express();
 var request = require('request');
 
+const API_KEY = 'D7CD2CE456D98EFC638B6444572F7C53';
+
 app.set('port', 4000);
 
 app.use(function(req, res, next) {
@@ -11,26 +13,12 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.get('/getnews', function(req, res) {
+app.get('/getownedgames', function(req, res) {
 	var qParams = [];
 	for (var p in req.query) {
 		qParams.push({'name':p, 'value':req.query[p]})
 	}
-	var url = 'http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?appid=' + qParams[0].name + '&count=3&maxlength=300&format=json';
-	request(url, function(err, response, body) {
-		if(!err && response.statusCode < 400) {
-			console.log(body);
-			res.send(body);
-		}
-	});	
-});
-
-app.get('/getrecentlyplayed', function(req, res) {
-	var qParams = [];
-	for (var p in req.query) {
-		qParams.push({'name':p, 'value':req.query[p]})
-	}
-var url = 'http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key=D7CD2CE456D98EFC638B6444572F7C53&steamid=' + qParams[0].name + '&format=json';
+var url = 'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=' + API_KEY + '&steamid=' + qParams[0].name + '&include_appinfo=1&format=json';
 	request(url, function(err, response, body) {
 		if(!err && response.statusCode < 400) {
 			console.log(body);
